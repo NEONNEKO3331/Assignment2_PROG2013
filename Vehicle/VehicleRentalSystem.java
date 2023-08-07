@@ -97,7 +97,7 @@ class Motorcycle extends Vehicle {
     private int engineCapacity;
 
     public Motorcycle(String vehicleNumber, String manufacturer, String model, double rentalRatePerDay,
-                      int engineCapacity) {
+            int engineCapacity) {
         super(vehicleNumber, manufacturer, model, rentalRatePerDay);
         this.engineCapacity = engineCapacity;
     }
@@ -128,7 +128,7 @@ class Motorcycle extends Vehicle {
     }
 }
 
-public class Main {
+public class VehicleRentalSystem {
     public static void main(String[] args) {
         List<Vehicle> vehicles = new ArrayList<>();
         Scanner scanner = new Scanner(System.in);
@@ -299,7 +299,8 @@ public class Main {
             System.out.println("========= All Vehicles =========");
             for (Vehicle vehicle : vehicles) {
                 System.out.println(vehicle);
-                System.out.println("Rental Cost (" + rentalDays + " days): RM" + vehicle.calculateRentalCost(rentalDays));
+                System.out
+                        .println("Rental Cost (" + rentalDays + " days): RM" + vehicle.calculateRentalCost(rentalDays));
                 if (vehicle instanceof Motorcycle) {
                     System.out.println("Top Speed: " + ((Motorcycle) vehicle).calculateTopSpeed() + " km/h");
                 }
