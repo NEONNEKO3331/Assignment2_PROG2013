@@ -1,5 +1,7 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 class Vehicle {
@@ -95,7 +97,7 @@ class Motorcycle extends Vehicle {
     private int engineCapacity;
 
     public Motorcycle(String vehicleNumber, String manufacturer, String model, double rentalRatePerDay,
-            int engineCapacity) {
+                      int engineCapacity) {
         super(vehicleNumber, manufacturer, model, rentalRatePerDay);
         this.engineCapacity = engineCapacity;
     }
@@ -109,7 +111,7 @@ class Motorcycle extends Vehicle {
     }
 
     public int calculateTopSpeed() {
-        return engineCapacity * 50;
+        return engineCapacity / 100 * 50;
     }
 
     @Override
@@ -151,6 +153,17 @@ public class Main {
         };
         double motorcycleBaseRentalRate = 30.0;
 
+        // Create a map to associate each motorcycle model with its engine capacity (cc)
+        Map<String, Integer> modelToEngineCapacityMap = new HashMap<>();
+        modelToEngineCapacityMap.put("Street 500", 200);
+        modelToEngineCapacityMap.put("Sportster", 150);
+        modelToEngineCapacityMap.put("YZF-R3", 300);
+        modelToEngineCapacityMap.put("MT-07", 250);
+        modelToEngineCapacityMap.put("GSX-R750", 200);
+        modelToEngineCapacityMap.put("V-Strom 650", 300);
+        modelToEngineCapacityMap.put("Ninja 400", 150);
+        modelToEngineCapacityMap.put("Ninja 650", 250);
+
         // Interactive menu
         int choice;
         do {
@@ -169,7 +182,7 @@ public class Main {
                     break;
                 case 2:
                     addMotorcycle(scanner, vehicles, motorcycleManufacturers, motorcycleModels,
-                            motorcycleBaseRentalRate);
+                            motorcycleBaseRentalRate, modelToEngineCapacityMap);
                     break;
                 case 3:
                     viewAllVehicles(scanner, vehicles);
@@ -229,7 +242,7 @@ public class Main {
     }
 
     private static void addMotorcycle(Scanner scanner, List<Vehicle> vehicles, String[] manufacturers,
-            String[][] models, double baseRentalRate) {
+            String[][] models, double baseRentalRate, Map<String, Integer> modelToEngineCapacityMap) {
         System.out.println("Adding a new motorcycle:");
 
         // Select manufacturer
@@ -263,11 +276,14 @@ public class Main {
 
         String model = availableModels[modelChoice - 1];
 
+        // Get the engine capacity from the modelToEngineCapacityMap
+        int engineCapacity = modelToEngineCapacityMap.getOrDefault(model, 0);
+
         // Set rental rate per day with the fixed base rate for motorcycles
         double rentalRatePerDay = baseRentalRate;
 
-        Motorcycle motorcycle = new Motorcycle(manufacturer + "-" + model + "-" + vehicles.size(), manufacturer, model,
-                rentalRatePerDay, 150);
+        Motorcycle motorcycle = new Motorcycle(manufacturer + "-" + model + "-" + vehicles.size(),
+                manufacturer, model, rentalRatePerDay, engineCapacity);
         vehicles.add(motorcycle);
         System.out.println("Motorcycle added successfully!");
     }
@@ -283,8 +299,7 @@ public class Main {
             System.out.println("========= All Vehicles =========");
             for (Vehicle vehicle : vehicles) {
                 System.out.println(vehicle);
-                System.out
-                        .println("Rental Cost (" + rentalDays + " days): RM" + vehicle.calculateRentalCost(rentalDays));
+                System.out.println("Rental Cost (" + rentalDays + " days): RM" + vehicle.calculateRentalCost(rentalDays));
                 if (vehicle instanceof Motorcycle) {
                     System.out.println("Top Speed: " + ((Motorcycle) vehicle).calculateTopSpeed() + " km/h");
                 }
